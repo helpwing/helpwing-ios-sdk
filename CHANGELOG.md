@@ -3,7 +3,7 @@
 Versions are immutable once tagged: SwiftPM resolves a tag straight from git, so `0.1.0`
 is the release and nothing else publishes anything.
 
-## Unreleased
+## 0.1.0
 
 - **First release.** The Helpwing support chat for native iOS apps, as a Swift package with
   no dependencies. Speaks the same public widget API as `widget.js` and
