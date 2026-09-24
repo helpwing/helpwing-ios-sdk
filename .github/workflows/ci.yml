@@ -1,0 +1,28 @@
+# Build and test on every push and pull request. Needs no secrets: this repository
+# publishes a Swift package, and SwiftPM resolves a tag straight from git.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: swift --version
+
+      - run: swift build
+
+      - run: swift test
+
+      - name: Build for iOS Simulator
+        run: xcodebuild -scheme Helpwing -destination 'generic/platform=iOS Simulator' build
