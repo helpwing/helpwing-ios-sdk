@@ -2,16 +2,22 @@ import XCTest
 @testable import Helpwing
 
 final class CopyTests: XCTestCase {
-    private let base = WidgetConfig(projectName: "Acme Cloud", greeting: "Hi! How can we help?", offlineMessage: "We are offline right now.")
+    private let base = WidgetConfig(
+        projectName: "Acme Cloud", greeting: "Hi! How can we help?", offlineMessage: "We are offline right now.",
+        typingText: "{name} is on it…"
+    )
     private var translated: WidgetConfig {
         var config = base
-        config.translations = ["ru": ["greeting": "Здравствуйте! Чем можем помочь?"]]
+        config.translations = [
+            "ru": ["greeting": "Здравствуйте! Чем можем помочь?", "typing_text": "{name} печатает…"],
+        ]
         return config
     }
 
     func testTranslationForTheLanguage() {
         XCTAssertEqual(Copy.forLocale(translated, .greeting, locale: "ru"), "Здравствуйте! Чем можем помочь?")
         XCTAssertEqual(Copy.forLocale(translated, .greeting, locale: "ru-RU"), "Здравствуйте! Чем можем помочь?")
+        XCTAssertEqual(Copy.forLocale(translated, .typingText, locale: "ru"), "{name} печатает…")
     }
 
     func testFallsBackToTheProjectsOwnWords() {
@@ -20,6 +26,12 @@ final class CopyTests: XCTestCase {
         XCTAssertEqual(Copy.forLocale(translated, .greeting), "Hi! How can we help?")
         XCTAssertEqual(Copy.forLocale(base, .greeting, locale: "ru"), "Hi! How can we help?")
         XCTAssertEqual(Copy.forLocale(nil, .greeting, locale: "ru"), "")
+        // No Russian typing_text of its own: falls back to the untranslated field, not blank.
+        XCTAssertEqual(Copy.forLocale(base, .typingText, locale: "ru"), "{name} is on it…")
+    }
+
+    func testTypingTextBlankByDefault() {
+        XCTAssertEqual(Copy.forLocale(WidgetConfig(), .typingText, locale: "ru"), "")
     }
 
     func testMatch() {
@@ -46,6 +58,13 @@ final class CopyTests: XCTestCase {
         XCTAssertEqual(config.translations, [:])
         XCTAssertFalse(config.hideWhenClosed)
         XCTAssertEqual(config.title, "")
+        XCTAssertEqual(config.typingText, "")
+    }
+
+    func testTypingTextDecodes() throws {
+        let json = ##"{"is_enabled":true,"project_name":"Acme","accent_color":"#fff","typing_text":"{name} is typing a reply…","is_online":true}"##
+        let config = try JSONDecoder().decode(WidgetConfig.self, from: Data(json.utf8))
+        XCTAssertEqual(config.typingText, "{name} is typing a reply…")
     }
 }
 

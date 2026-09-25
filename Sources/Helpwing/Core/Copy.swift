@@ -1,12 +1,13 @@
 import Foundation
 
-/// The project's own words (heading, greeting, offline message) in the app's language.
+/// The project's own words (heading, greeting, offline message, typing text) in the app's language.
 /// The chat's chrome ("Send", …) is not here: that is `SupportLabels`, which the app owns.
 public enum Copy {
     public enum Field: String, Sendable {
         case title
         case greeting
         case offlineMessage = "offline_message"
+        case typingText = "typing_text"
     }
 
     /// The project's translation for `locale`, else what it wrote without one. `ru-RU` finds `ru`.
@@ -20,6 +21,7 @@ public enum Copy {
         case .title: return config.title
         case .greeting: return config.greeting
         case .offlineMessage: return config.offlineMessage
+        case .typingText: return config.typingText
         }
     }
 

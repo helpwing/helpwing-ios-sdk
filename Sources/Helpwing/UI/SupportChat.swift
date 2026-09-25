@@ -74,7 +74,7 @@ public struct SupportChat<Header: View>: View {
             transcript(theme)
 
             if let typing = support.typing {
-                Text(labels.typing(typing.name))
+                Text(typingLabel(for: typing))
                     .font(theme.font(12))
                     .foregroundColor(Color(hex: theme.mutedText))
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -133,6 +133,12 @@ public struct SupportChat<Header: View>: View {
             .lineSpacing(4)
             .frame(maxWidth: .infinity)
             .padding(32)
+    }
+
+    /// The project's typing text with `{name}` filled in, or the built-in label when it wrote none.
+    private func typingLabel(for typing: Typing) -> String {
+        let text = support.copy.typingText
+        return text.isEmpty ? labels.typing(typing.name) : text.replacingOccurrences(of: "{name}", with: typing.name)
     }
 
     private func muted(_ text: String, _ theme: HelpwingTheme) -> some View {

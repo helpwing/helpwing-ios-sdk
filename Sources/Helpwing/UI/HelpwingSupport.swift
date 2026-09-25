@@ -11,6 +11,8 @@ public struct SupportCopy: Equatable, Sendable {
     public var title: String
     public var greeting: String
     public var offlineMessage: String
+    /// Blank keeps the built-in "{name} is typing…" label. `{name}` is replaced by the agent's name.
+    public var typingText: String
 }
 
 /// One chat for the app: owns the client, follows the app's foreground state, resolves the theme.
@@ -85,7 +87,8 @@ public final class HelpwingSupport: ObservableObject {
         SupportCopy(
             title: Copy.forLocale(config, .title, locale: locale),
             greeting: Copy.forLocale(config, .greeting, locale: locale),
-            offlineMessage: Copy.forLocale(config, .offlineMessage, locale: locale)
+            offlineMessage: Copy.forLocale(config, .offlineMessage, locale: locale),
+            typingText: Copy.forLocale(config, .typingText, locale: locale)
         )
     }
 

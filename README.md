@@ -151,6 +151,11 @@ wrote without one, never to a stock line of ours. `SupportChat` draws the greeti
 offline message; read them yourself from `support.copy` if you draw your own empty state.
 `copy.title` is there too, blank when the project has written none.
 
+`copy.typingText` is the project's own words for "an agent is typing", with `{name}` in it
+where the agent's name goes. `SupportChat` fills it in and draws it in place of
+`labels.typing`; a project that has written none falls back to that label, so
+`SupportLabels(typing:)` still works exactly as it did before this field existed.
+
 ## Colours
 
 The project picks an accent in the dashboard and everything else is worked out from it,

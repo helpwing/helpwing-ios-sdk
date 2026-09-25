@@ -29,7 +29,9 @@ public struct WidgetConfig: Codable, Equatable, Sendable {
     public var title: String
     public var greeting: String
     public var offlineMessage: String
-    /// Title, greeting and offline message per language code. Read through `Copy.forLocale`.
+    /// Shown while an agent is typing, with `{name}` for their name. Blank keeps the built-in label.
+    public var typingText: String
+    /// Title, greeting, offline message and typing text per language code. Read through `Copy.forLocale`.
     public var translations: [String: [String: String]]
     public var defaultLocale: String
     public var requireEmail: Bool
@@ -53,6 +55,7 @@ public struct WidgetConfig: Codable, Equatable, Sendable {
         case showBranding = "show_branding"
         case title, greeting
         case offlineMessage = "offline_message"
+        case typingText = "typing_text"
         case translations
         case defaultLocale = "default_locale"
         case requireEmail = "require_email"
@@ -77,6 +80,7 @@ public struct WidgetConfig: Codable, Equatable, Sendable {
         title: String = "",
         greeting: String = "",
         offlineMessage: String = "",
+        typingText: String = "",
         translations: [String: [String: String]] = [:],
         defaultLocale: String = "",
         requireEmail: Bool = false,
@@ -99,6 +103,7 @@ public struct WidgetConfig: Codable, Equatable, Sendable {
         self.title = title
         self.greeting = greeting
         self.offlineMessage = offlineMessage
+        self.typingText = typingText
         self.translations = translations
         self.defaultLocale = defaultLocale
         self.requireEmail = requireEmail
@@ -124,6 +129,7 @@ public struct WidgetConfig: Codable, Equatable, Sendable {
         title = c.value(.title, "")
         greeting = c.value(.greeting, "")
         offlineMessage = c.value(.offlineMessage, "")
+        typingText = c.value(.typingText, "")
         translations = c.value(.translations, [:])
         defaultLocale = c.value(.defaultLocale, "")
         requireEmail = c.value(.requireEmail, false)
